@@ -1,0 +1,99 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Tide OS</title><meta name="theme-color" content="#101114">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;400;600&display=swap">
+<style>
+:root{--bg:#101114;--card:#1A1C21;--line:#24262B;--fg:#F2F0EA;--mut:#A3A39C;--ac:#C8F169}
+*{box-sizing:border-box}html,body{height:100%;margin:0;background:#08090B;color:var(--fg);font-family:'Bricolage Grotesque',system-ui,sans-serif}
+body{display:grid;place-items:center}
+#os{position:relative;width:390px;height:844px;max-height:100vh;background:var(--bg);border-radius:44px;overflow:hidden;border:1px solid var(--line);user-select:none;-webkit-user-select:none}
+@media(max-width:500px){body{display:block}#os{width:100%;height:100dvh;max-height:none;border-radius:0;border:0}}
+.s{position:absolute;inset:0;z-index:2;background:var(--bg);padding:max(56px,env(safe-area-inset-top)) 24px max(24px,env(safe-area-inset-bottom));display:flex;flex-direction:column;opacity:0;visibility:hidden;transform:translateY(48px);transition:opacity .25s ease,transform .38s cubic-bezier(.2,.8,.2,1),visibility 0s .38s}
+.s.on{opacity:1;visibility:visible;transform:none;transition:opacity .25s ease,transform .38s cubic-bezier(.2,.8,.2,1),visibility 0s}
+#now{z-index:1;opacity:1;visibility:visible;transform:none;transition:transform .38s cubic-bezier(.2,.8,.2,1),opacity .3s}
+#os.open #now{transform:scale(.94);opacity:.3}
+button{font:inherit;color:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .12s ease,opacity .2s,background .2s}
+button:active{transform:scale(.96)}button:focus-visible,input:focus-visible{outline:2px solid var(--ac);outline-offset:2px}
+.mut{color:var(--mut)}.top{display:flex;justify-content:space-between;align-items:center;min-height:44px}
+.chip{height:40px;padding:0 16px;border:1px solid #3A3C42;border-radius:20px;background:none;font-size:15px}
+.x{width:44px;height:44px;border-radius:22px;border:0;background:var(--card);font-size:15px}
+#clock{font-size:120px;font-weight:300;line-height:1;letter-spacing:-5px;margin-top:36px}
+.lead{font-size:32px;font-weight:600;line-height:1.1;margin-top:40px}
+.tl{position:relative;height:84px;margin-top:40px}.trk{position:absolute;top:42px;left:0;right:0;height:2px;background:#2A2C31}.fill{position:absolute;top:42px;left:0;height:2px;background:var(--ac)}
+.m{position:absolute;top:36px;width:14px;height:14px;margin-left:-7px;border-radius:7px;background:var(--bg);border:2px solid #5A5C62}.m.n{background:var(--ac);border-color:var(--ac);width:18px;height:18px;margin-left:-9px;top:34px}
+.lb{position:absolute;font-size:13px;color:var(--mut);transform:translateX(-50%);white-space:nowrap;top:62px}.lb.up{top:8px}
+.dock{margin-top:auto;display:flex;gap:12px}
+.pill{flex:1;height:60px;border:0;border-radius:30px;background:var(--fg);color:var(--bg);font-size:18px;font-weight:600}
+.orb{width:60px;height:60px;border-radius:30px;border:1px solid #3A3C42;background:none;display:grid;place-items:center}
+.row{display:flex;justify-content:space-between;align-items:baseline;width:100%;padding:12px 0;border:0;border-bottom:1px solid var(--line);background:none;font-size:42px;font-weight:300;text-align:left}.row small{font-size:14px;color:var(--mut)}.row:active{opacity:.6;transform:none}
+.row.as{font-size:20px;color:var(--ac);font-weight:400}
+input{width:100%;height:56px;border:0;border-radius:28px;background:var(--card);color:var(--fg);padding:0 20px;font:inherit;font-size:16px;outline:0;user-select:text;-webkit-user-select:text}
+form{display:flex;gap:8px}.send{width:56px;height:56px;flex:none;border:0;border-radius:28px;background:var(--ac);color:var(--bg);font-size:20px}
+.log{flex:1;overflow:auto;scroll-behavior:smooth;overscroll-behavior:contain;display:flex;flex-direction:column;gap:14px;padding:12px 0}
+.u{align-self:flex-end;max-width:280px;background:var(--card);border-radius:24px 24px 6px 24px;padding:14px 18px;font-size:18px}.a{font-size:23px;font-weight:300;line-height:1.25}.card{background:var(--card);border-radius:28px;padding:20px}
+.u,.a,.card{animation:in .32s cubic-bezier(.2,.8,.2,1) both}@keyframes in{from{opacity:0;transform:translateY(10px)}}
+.b{border:0;border-radius:24px;height:48px;font-weight:600;font-size:16px;flex:1}.p{background:var(--ac);color:var(--bg)}.g{background:transparent;border:1px solid #3A3C42}
+.dots span{display:inline-block;width:8px;height:8px;margin-right:6px;border-radius:4px;background:var(--mut);animation:d 1s infinite}.dots span:nth-child(2){animation-delay:.15s}.dots span:nth-child(3){animation-delay:.3s}@keyframes d{50%{opacity:.2}}
+.d{display:flex;align-items:center;gap:18px;width:100%;padding:22px;border:1px solid var(--line);border-radius:28px;background:var(--card);text-align:left;margin-bottom:14px}.d[aria-pressed=true]{border:2px solid var(--ac)}.d b{display:block;font-size:24px}.d span span{display:block;font-size:15px;color:var(--mut);margin-top:2px}
+.d circle{stroke:#2A2C31;transition:stroke .25s}.d[aria-pressed=true] circle{stroke:var(--ac)}
+#toast{position:absolute;left:24px;right:24px;bottom:104px;z-index:5;background:var(--fg);color:var(--bg);border-radius:20px;padding:14px 18px;font-size:16px;font-weight:600;opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none}#toast.on{opacity:1;transform:none}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body><main id="os">
+<section class="s on" id="now"><div class="top"><span class="mut" id="date"></span><button class="chip" data-go="depth" aria-label="Change depth"><span id="dchip">Tide</span></button></div>
+<div id="clock"></div>
+<div class="lead">Leave for Dana’s<br><span class="mut" style="font-weight:300">in 12 min</span></div>
+<div style="display:flex;gap:10px;margin-top:20px"><button class="chip" data-toast="Directions started" style="background:var(--ac);color:var(--bg);border:0;font-weight:600">Go</button><button class="chip" data-toast="Snoozed for 10 min">Snooze</button></div>
+<div class="tl" role="img" aria-label="Today’s timeline"><div class="trk"></div><div class="fill" id="fill"></div>
+<i class="m" style="left:65%"></i><span class="lb" style="left:65%">Dinner 6:30</span><i class="m" style="left:80%"></i><span class="lb up" style="left:80%">Wind down 8:00</span><i class="m n" id="nm"></i><span class="lb up" id="nl">Now</span></div>
+<div class="dock"><button class="pill" data-go="reach">Reach</button><button class="orb" data-go="ask" aria-label="Open assistant"><svg width="26" height="26" viewBox="0 0 26 26" fill="none" stroke="#C8F169" stroke-width="2" aria-hidden="true"><circle cx="13" cy="13" r="11"/><circle cx="13" cy="13" r="4" fill="#C8F169"/></svg></button></div></section>
+<section class="s" id="reach"><div class="top"><span class="mut">Reach</span><button class="x" data-go="now" aria-label="Close">✕</button></div>
+<form id="rf" style="margin:12px 0 8px"><input id="rq" placeholder="Find an app or action" aria-label="Search" autocomplete="off"></form><div id="verbs"></div></section>
+<section class="s" id="ask"><div class="top"><span class="mut" style="display:flex;align-items:center;gap:10px"><svg width="18" height="18" viewBox="0 0 26 26" fill="none" stroke="#C8F169" stroke-width="2.5" aria-hidden="true"><circle cx="13" cy="13" r="11"/><circle cx="13" cy="13" r="4" fill="#C8F169"/></svg>Assistant</span><button class="x" data-go="now" aria-label="Close">✕</button></div>
+<div class="log" id="log" aria-live="polite"></div>
+<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px"><button class="chip" data-ask="Will it rain?">Will it rain?</button><button class="chip" data-ask="Go Still">Go Still</button><button class="chip" data-ask="Move dinner to 7 and tell Dana">Move dinner</button></div>
+<form id="af"><input id="aq" placeholder="Ask anything" aria-label="Ask the assistant" autocomplete="off"><button class="send" aria-label="Send">↑</button></form></section>
+<section class="s" id="depth"><div class="top"><span class="mut">Depth</span><button class="x" data-go="now" aria-label="Close">✕</button></div>
+<div style="font-size:40px;font-weight:300;line-height:1.1;margin:12px 0 28px">How present<br>do you want to be?</div>
+<button class="d" data-d="Open"><svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke-width="2" aria-hidden="true"><circle cx="22" cy="22" r="20"/><circle cx="22" cy="22" r="13"/><circle cx="22" cy="22" r="5"/></svg><span><b>Open</b><span>Everything can reach you</span></span></button>
+<button class="d" data-d="Tide"><svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke-width="2" aria-hidden="true"><circle cx="22" cy="22" r="13"/><circle cx="22" cy="22" r="5"/></svg><span><b>Tide</b><span>Only people and time-sensitive things</span></span></button>
+<button class="d" data-d="Still"><svg width="44" height="44" viewBox="0 0 44 44" fill="none" stroke-width="2" aria-hidden="true"><circle cx="22" cy="22" r="5"/></svg><span><b>Still</b><span>Nothing until 7:00</span></span></button></section>
+<div id="toast" role="status"></div></main>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const show=n=>{$$('.s').forEach(e=>e.classList.toggle('on',e.id===n));$('#os').classList.toggle('open',n!=='now');
+if(n==='ask'&&!$('#log').children.length)add('a','Hi. I can move plans, check the weather or change how present you are.');
+const i=n==='reach'?$('#rq'):n==='ask'?$('#aq'):0;if(i)setTimeout(()=>i.focus(),380)};
+let tt;const toast=t=>{const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('on'),1800)};
+function tick(){const d=new Date(),h=d.getHours()+d.getMinutes()/60,f=Math.min(1,Math.max(0,(h-12)/10))*100;
+$('#clock').textContent=d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'}).replace(/\s?[AP]M/i,'');
+$('#date').textContent=d.toLocaleDateString([],{weekday:'short',day:'numeric',month:'short'});
+$('#fill').style.width=f+'%';$('#nm').style.left=f+'%';$('#nl').style.left=Math.min(88,Math.max(8,f))+'%'}
+tick();setInterval(tick,15000);
+function setDepth(v){$('#dchip').textContent=v;$$('.d').forEach(b=>b.setAttribute('aria-pressed',b.dataset.d===v))}setDepth('Tide');
+const V=[['Message','2 waiting'],['Capture','photo · voice · note'],['Play','resume'],['Pay','wallet'],['Go','home · 12 min'],['Read','saved']];
+function list(q=''){const el=$('#verbs');el.textContent='';q=q.trim();
+V.filter(v=>v[0].toLowerCase().includes(q.toLowerCase())).forEach(v=>{const b=document.createElement('button');b.className='row';b.dataset.v=v[0];b.innerHTML=v[0]+'<small>'+v[1]+'</small>';el.append(b)});
+if(q){const b=document.createElement('button');b.className='row as';b.dataset.assist=q;b.textContent='Ask assistant: “'+q+'”';el.append(b)}}list();
+const log=$('#log');
+function add(c,t){const e=document.createElement('div');e.className=c;if(t)e.textContent=t;log.append(e);log.scrollTop=log.scrollHeight;return e}
+function reply(t){t=t.toLowerCase();
+if(/dinner|move|7/.test(t))return['Dinner moves to 7:00. I’ll let Dana know you’ll leave at 6:40.',1];
+if(/rain|weather|bike/.test(t))return['Rain starts around 5:40. Leave in the next 20 minutes and you’ll stay dry.'];
+if(/still|quiet|focus|silence/.test(t)){setDepth('Still');return['Going Still. Nothing reaches you until 7:00.']}
+if(/open/.test(t)){setDepth('Open');return['Open. Everything can reach you again.']}
+if(/play|music|mix/.test(t))return['Resuming your last mix.'];
+if(/message|dana|text/.test(t))return['Draft to Dana: “Running a little late, see you soon.” Say send, or tell me what to change.'];
+return['I can move plans, check the weather, or change how present you are. Try “Move dinner to 7”.']}
+function send(t){t=t.trim();if(!t)return;show('ask');add('u',t);const w=add('a dots');w.innerHTML='<span></span><span></span><span></span>';
+setTimeout(()=>{const[r,c]=reply(t);w.className='a';w.textContent=r;
+if(c){const k=add('card');k.innerHTML='<div style="display:flex;gap:10px"><button class="b p" data-ok>Confirm</button><button class="b g" data-no>Undo</button></div>'}
+log.scrollTop=log.scrollHeight},700)}
+document.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;navigator.vibrate&&navigator.vibrate(6);const D=b.dataset;
+if(D.go)show(D.go);else if(D.ask)send(D.ask);else if(D.assist!==undefined){$('#rq').value='';list();send(D.assist)}
+else if(D.v){show('now');toast('Opening '+D.v)}else if(D.toast)toast(D.toast);else if(D.d){setDepth(D.d);show('now')}
+else if('ok' in D||'no' in D){b.closest('.card').textContent='ok' in D?'Done. Dinner is at 7:00 and Dana knows.':'Undone. Nothing changed.'}});
+$('#rq').addEventListener('input',e=>list(e.target.value));
+$('#rf').addEventListener('submit',e=>{e.preventDefault();const f=$('#verbs button');if(f)f.click()});
+$('#af').addEventListener('submit',e=>{e.preventDefault();send($('#aq').value);$('#aq').value=''});
+let y0=null,cur='now';
+document.addEventListener('touchstart',e=>{y0=e.touches[0].clientY;cur=($('.s.on')||$('#now')).id;if(cur==='ask'&&!e.target.closest('.top'))y0=null},{passive:true});
+document.addEventListener('touchend',e=>{if(y0===null)return;const d=e.changedTouches[0].clientY-y0;y0=null;if(cur==='now'&&d<-70)show('reach');else if(cur!=='now'&&d>90)show('now')},{passive:true});
+</script></body></html>
